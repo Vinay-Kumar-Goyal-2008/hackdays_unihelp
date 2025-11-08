@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UniHelp AI - Login</title>
+  <style>
+    :root {
+  --primary: #3b82f6;
+  --text: #1e293b;
+  --bg: #f8fafc;
+  --card: #ffffff;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  background-color: var(--bg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.login-container {
+  background: var(--card);
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+}
+
+h1 {
+  color: var(--primary);
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  color: var(--text);
+  font-size: 0.9rem;
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  text-align: left;
+  font-weight: 500;
+  margin: 10px 0 5px;
+  color: var(--text);
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  outline: none;
+  transition: 0.2s;
+}
+
+input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 5px rgba(59, 130, 246, 0.3);
+}
+
+.btn {
+  width: 100%;
+  padding: 12px;
+  background: var(--primary);
+  color: white;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn:hover {
+  background-color: #2563eb;
+}
+
+#message {
+  margin-top: 10px;
+  color: red;
+  font-weight: 500;
+}
+
+  </style>
+<body>
+  <div class="login-container">
+    <h1>UniHelp AI Login</h1>
+    <p class="subtitle">For registered university students only</p>
+
+    <form id="loginForm">
+      <label for="username">Student ID</label>
+      <input type="text" id="username" placeholder="Enter your Student ID" required>
+
+      <label for="password">Password</label>
+      <input type="password" id="password" placeholder="Enter your password" required>
+
+      <button type="submit" class="btn">Login</button>
+    </form>
+
+    <p id="message"></p>
+  </div>
+
+  <script>
+const message = document.getElementById('message');
+
+
+document.getElementById("loginForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const username = document.getElementById("username").value.trim();
+  const password = document.getElementById("password").value.trim();
+  const message = document.getElementById("message");
+
+  const resp = await fetch("/logincredintialscheck", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ userid: username, password: password }),
+  });
+
+  if (resp.redirected) {
+    window.location.href = resp.url;
+  } else {
+    let res = await resp.json().catch(() => null);
+    if (res && res.status === 404) {
+      message.style.color = "red";
+      message.textContent = "Invalid Student ID or Password.";
+    } else {
+      message.style.color = "red";
+      message.textContent = "Login failed. Try again.";
+    }
+  }
+});
+
+  </script>
+</body>
+</html>
