@@ -4,7 +4,7 @@ import os
 import requests
 app = Flask(__name__)
 CORS(app)
-api_key = 'AIzaSyClSwRca9kJ0S7aYYf3wlJuf0n3tmuWTlI'
+api_key = ''
 
 GEMINI_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={api_key}"
 
@@ -48,3 +48,4 @@ def process_query():
 
 if __name__ == "__main__":
     app.run(port=5000, debug=True)
+
